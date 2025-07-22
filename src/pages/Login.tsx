@@ -51,7 +51,7 @@ export const Login: React.FC = () => {
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
             <img 
-              src="/logo.png" 
+              src="/Admin/logo.png" 
               alt="Logo" 
               className="h-24 w-auto drop-shadow-xl"
             />

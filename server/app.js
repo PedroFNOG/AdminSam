@@ -57,6 +57,9 @@ app.use(express.urlencoded({ extended: true }));
 // Servir arquivos estáticos do build do React no subdiretório /Admin
 app.use('/Admin', express.static(path.join(__dirname, '../dist')));
 
+// Servir arquivos públicos (logo, favicon) no subdiretório /Admin
+app.use('/Admin', express.static(path.join(__dirname, '../public')));
+
 // Rotas da API com prefixo /Admin/api
 app.use('/Admin/api/auth', authRoutes);
 app.use('/Admin/api/revendas', revendasRoutes);

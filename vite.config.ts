@@ -7,11 +7,19 @@ export default defineConfig({
   base: '/Admin/',
   server: {
     port: 5173,
-    host: true
+    host: true,
+    fs: {
+      allow: ['..']
+    }
   },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
+    }
   },
   optimizeDeps: {
     exclude: ['lucide-react'],

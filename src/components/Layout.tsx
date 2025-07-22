@@ -58,7 +58,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="flex items-center justify-between h-20 px-6 bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-700 text-white">
           <div className="flex items-center space-x-3">
             <img 
-              src="/logo.png" 
+              src="/Admin/logo.png" 
               alt="Logo" 
               className="h-8 sm:h-12 w-auto drop-shadow-lg"
             />
