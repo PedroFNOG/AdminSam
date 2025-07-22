@@ -1,7 +1,7 @@
 import { RevendaPlan, StreamingPlan, RevendaPlanFormData, StreamingPlanFormData } from '../types/plan';
 
 class PlanService {
-  private baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+  private baseURL = import.meta.env.VITE_API_URL || 'http://samhost.wcore.com.br/Admin/api';
 
   private getAuthHeaders() {
     const token = localStorage.getItem('admin_token');

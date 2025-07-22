@@ -3,6 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { settings } from './config/database.js';
 
 import authRoutes from './routes/auth.js';
@@ -15,6 +17,9 @@ import serversRoutes from './routes/servers.js';
 import configRoutes from './routes/config.js';
 import plansRoutes from './routes/plans.js';
 import streamingsRoutes from './routes/streamings.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -29,7 +34,12 @@ app.use(limiter);
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
-    const allowedOrigins = Array.isArray(settings.CORS_ORIGIN) ? settings.CORS_ORIGIN : [settings.CORS_ORIGIN];
+    const allowedOrigins = [
+      'http://samhost.wcore.com.br',
+      'https://samhost.wcore.com.br',
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -44,19 +54,28 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/revendas', revendasRoutes);
-app.use('/api/admins', adminsRoutes);
-app.use('/api/logs', logsRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/profiles', profilesRoutes);
-app.use('/api/servers', serversRoutes);
-app.use('/api/config', configRoutes);
-app.use('/api/plans', plansRoutes);
-app.use('/api/streamings', streamingsRoutes);
+// Servir arquivos estáticos do build do React no subdiretório /Admin
+app.use('/Admin', express.static(path.join(__dirname, '../dist')));
 
-app.get('/api/health', (req, res) => {
+// Rotas da API com prefixo /Admin/api
+app.use('/Admin/api/auth', authRoutes);
+app.use('/Admin/api/revendas', revendasRoutes);
+app.use('/Admin/api/admins', adminsRoutes);
+app.use('/Admin/api/logs', logsRoutes);
+app.use('/Admin/api/dashboard', dashboardRoutes);
+app.use('/Admin/api/profiles', profilesRoutes);
+app.use('/Admin/api/servers', serversRoutes);
+app.use('/Admin/api/config', configRoutes);
+app.use('/Admin/api/plans', plansRoutes);
+app.use('/Admin/api/streamings', streamingsRoutes);
+
+app.get('/Admin/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Rota catch-all para o React Router no subdiretório /Admin
+app.get('/Admin/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 app.use((err, req, res, next) => {
@@ -72,7 +91,8 @@ const PORT = settings.PORT;
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
-  console.log(`Dashboard: http://localhost:${PORT}/api/health`);
+  console.log(`Admin Panel: http://samhost.wcore.com.br/Admin`);
+  console.log(`API Health: http://samhost.wcore.com.br/Admin/api/health`);
 });
 
 export default app;

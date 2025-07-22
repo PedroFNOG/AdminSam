@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:prod": "VITE_API_URL=http://samhost.wcore.com.br/Admin/api vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "node server/app.js",
-    "server:dev": "nodemon server/app.js",
-    "build:server": "echo 'Server build completed'"
+    "server": "NODE_ENV=production node server/app.js",
+    "server:dev": "NODE_ENV=development nodemon server/app.js",
+    "build:server": "echo 'Server build completed'",
+    "deploy": "npm run build:prod && npm run server"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

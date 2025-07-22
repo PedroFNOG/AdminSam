@@ -7,7 +7,7 @@ interface LoginResponse {
 }
 
 class AuthService {
-  private baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+  private baseURL = import.meta.env.VITE_API_URL || 'http://samhost.wcore.com.br/Admin/api';
 
   async login(email: string, senha: string): Promise<LoginResponse> {
     try {
